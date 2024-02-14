@@ -37,6 +37,7 @@ contract LoveToken is ERC20 {
         address _stakingVault
     ) ERC20("LoveToken", "<3", 18) {
         soulmateContract = _soulmateContract;
+        // @written no address(0) checks
         airdropVault = _airdropVault;
         stakingVault = _stakingVault;
     }

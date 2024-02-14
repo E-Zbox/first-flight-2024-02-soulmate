@@ -17,7 +17,7 @@ contract Staking {
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
     //////////////////////////////////////////////////////////////*/
-
+    // @written standard naming convention is not followed. prefix immutable variable with `i_`
     ILoveToken public immutable loveToken;
     ISoulmate public immutable soulmateContract;
     IVault public immutable stakingVault;
@@ -68,6 +68,10 @@ contract Staking {
     /// @notice Claim rewards for staking.
     /// @notice Users can claim 1 token per staking token per week.
     function claimRewards() public {
+        /**
+            @written ownerToId returns default uint256 - 0 for uninitialized address in mapping
+            leading to claiming of all the available rewards (LoveToken) approved for the Staking contract
+        */
         uint256 soulmateId = soulmateContract.ownerToId(msg.sender);
         // first claim
         if (lastClaim[msg.sender] == 0) {

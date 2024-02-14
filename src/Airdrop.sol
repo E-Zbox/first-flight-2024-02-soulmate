@@ -53,6 +53,14 @@ contract Airdrop {
         if (soulmateContract.isDivorced()) revert Airdrop__CoupleIsDivorced();
 
         // Calculating since how long soulmates are reunited
+        /**
+            @written no check to verify if ownerToId == 0 belongs to current msg.sender
+            since non initialized address in mapping would return default uint256 -- 0
+        */
+        /**
+            @written if soulmate with ownerToId == 0 has not claimed reward,
+            an attacker with a non-initialized address can keep claiming reward (LoveToken)
+        */
         uint256 numberOfDaysInCouple = (block.timestamp -
             soulmateContract.idToCreationTimestamp(
                 soulmateContract.ownerToId(msg.sender)

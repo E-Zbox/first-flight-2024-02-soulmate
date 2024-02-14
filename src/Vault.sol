@@ -23,6 +23,7 @@ contract Vault {
 
     /// @notice Init vault with the loveToken.
     /// @notice Vault will approve its corresponding management contract to handle tokens.
+    // @written wrong placement of naspec. This vaultInitialize comment should be placed before defining the bool variable.
     /// @notice vaultInitialize protect against multiple initialization.
     function initVault(ILoveToken loveToken, address managerContract) public {
         if (vaultInitialize) revert Vault__AlreadyInitialized();

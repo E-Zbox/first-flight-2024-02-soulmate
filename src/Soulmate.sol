@@ -20,8 +20,10 @@ contract Soulmate is ERC721 {
 
     string[4] niceWords = ["sweetheart", "darling", "my dear", "honey"];
 
+    // @written [LOW] no natspec for mapping definitions
     mapping(uint256 id => address[2] owners) private idToOwners;
     mapping(uint256 id => uint256 timestamp) public idToCreationTimestamp;
+    // ?question (answered) - mapping(soulmate1 => soulmate2) easy to check if soulmate1 has a SM. how do I check if address soulmate2 has a SM.
     mapping(address soulmate1 => address soulmate2) public soulmateOf;
     mapping(address owner => uint256 id) public ownerToId;
 
@@ -79,6 +81,7 @@ contract Soulmate is ERC721 {
             soulmateOf[soulmate1] = msg.sender;
             idToCreationTimestamp[nextID] = block.timestamp;
 
+            // @audit soulmate2 points to address(0)
             emit SoulmateAreReunited(soulmate1, soulmate2, nextID);
 
             _mint(msg.sender, nextID++);
@@ -104,6 +107,7 @@ contract Soulmate is ERC721 {
     /// @notice Allows any soulmates with the same NFT ID to write in a shared space on blockchain.
     /// @param message The message to write in the shared space.
     function writeMessageInSharedSpace(string calldata message) external {
+        // @written default value for uint256 == 0 means that persons without SM NFT can send message using ID == 0
         uint256 id = ownerToId[msg.sender];
         sharedSpace[id] = message;
         emit MessageWrittenInSharedSpace(id, message);
@@ -112,6 +116,7 @@ contract Soulmate is ERC721 {
     /// @notice Allows any soulmates with the same NFT ID to read in a shared space on blockchain.
     function readMessageInSharedSpace() external view returns (string memory) {
         // Add a little touch of romantism
+        // @written default value for uint256 == 0 means that persons without SM NFT can read messages in ID == 0
         return
             string.concat(
                 sharedSpace[ownerToId[msg.sender]],
